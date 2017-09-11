@@ -1,19 +1,21 @@
-#pragma once
-#include <jni.h>
+
+
+#pragma once 		// Исключает дубликаты файла (импортировать единожды)
+#include <jni.h>	
 #include <Windows.h>
 #include <stdint.h>
 #include <cstring>
 #include <iostream>
 
-#using <mscorlib.dll>
-#define x64
+#using <mscorlib.dll> // импортим управляемую билиотеку CLR (ядро .NET Framework)
+
 #ifdef x64
-#using <RC.Core.netmodule>
+#using <RC.Core.netmodule> // импортим библиотеку скомпилированного кода (Без dll header)
 #else
 #using <RC.Core.x86.netmodule>
 #endif
 
-
+// используем пространства имён из NET Framework
 using namespace System;
 using namespace System::IO;
 using namespace System::Text;
@@ -23,23 +25,28 @@ using namespace Rc;
 using namespace Rc::Framework;
 using namespace Rc::Core;
 using namespace Rc::Framework::Yaml::Serialization;
+//- 
 
+// Выравнивание памяти по 1 биту
 #pragma pack(push, 1)
 ref struct OrchNode
 {
 public:
+	// Manage Type String
+	// wchar_t* 
 	String^ CommentNode;
 	String^ KeyNode;
 	String^ ValueNode;
 };
+// Отключение выравнивания
 #pragma pack(pop)
 
-
+// Объявляем класс c параметрами ссылочности (save point) (Orch^ name)
 ref class Orch
 {
 public:
 	String^ path;
-	FileStream^ stream;
+	FileStream^ stream; // 
 	bool inited; 
 	bool isStarted;
 	Dictionary<String^, OrchNode^> base;
